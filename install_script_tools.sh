@@ -10,6 +10,7 @@
 PIHOME=/home/pi
 DEXTER=Dexter
 LIB=lib
+SCRIPTS=script_tools
 
 pushd $PIHOME
 
@@ -27,12 +28,12 @@ if [ ! -d $LIB ] ; then
 	mkdir $LIB
 fi
 
-# check if /home/pi/Dexter/lib/Dexter exists
+# check if /home/pi/Dexter/lib/script_tools exists
 # if yes refresh the folder
 # if not, clone the folder
-if [ -d $DEXTER ] ; then
+if [ -d $SCRIPT ] ; then
 	echo "Pulling"
-	cd $DEXTER
+	cd $SCRIPT
 	sudo git pull
 else
 	# clone the folder
