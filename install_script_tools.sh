@@ -21,21 +21,20 @@ if [ ! -d $DEXTER ] ; then
 fi
 # go into $DEXTER
 cd $DEXTER
-echo $PWD
+
 
 # check if /home/pi/Dexter/lib exists, if not create it
 if [ ! -d $LIB ] ; then
     mkdir $LIB
 fi
 cd $LIB
-echo $PWD
 
 # check if /home/pi/Dexter/lib/Dexter exists, if not create it
 if [ ! -d $DEXTER ] ; then
     mkdir $DEXTER
 fi
 cd $DEXTER
-echo $PWD
+
 
 # check if /home/pi/Dexter/lib/script_tools exists
 # if yes refresh the folder
@@ -45,7 +44,6 @@ if [ ! -d $SCRIPT ] ; then
     sudo git clone https://github.com/DexterInd/script_tools.git
 else
     cd $SCRIPT
-    echo $PWD
     sudo git pull
 fi
 
