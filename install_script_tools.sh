@@ -27,6 +27,7 @@ if [ ! -d $LIB ] ; then
 	echo "creating $PIHOME/$DEXTER/$LIB"
 	mkdir $LIB
 fi
+cd $LIB
 
 # check if /home/pi/Dexter/lib/script_tools exists
 # if yes refresh the folder
