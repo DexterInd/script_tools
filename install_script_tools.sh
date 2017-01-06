@@ -3,7 +3,7 @@
 #####################################################################
 #
 # to install:
-# curl https://raw.githubusercontent.com/DexterInd/script_tools/master/install_script_tools.sh | bash
+# curl --silent https://raw.githubusercontent.com/DexterInd/script_tools/master/install_script_tools.sh | bash
 #
 #####################################################################
 #####################################################################
@@ -41,10 +41,10 @@ cd $DEXTER
 # if not, clone the folder
 if [ ! -d $SCRIPT ] ; then
     # clone the folder
-    sudo git clone https://github.com/DexterInd/script_tools.git
+    sudo git clone --quiet https://github.com/DexterInd/script_tools.git
 else
     cd $SCRIPT
-    sudo git pull
+    sudo git pull --quiet
 fi
 
 popd
