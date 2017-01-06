@@ -13,7 +13,7 @@ DEXTER=Dexter
 LIB=lib
 SCRIPT=script_tools
 
-pushd $PIHOME
+pushd $PIHOME > /dev/null
 result=${PWD##*/} 
 # check if ~/Dexter exists, if not create it
 if [ ! -d $DEXTER ] ; then
@@ -47,4 +47,4 @@ else
     sudo git pull --quiet
 fi
 
-popd
+popd > /dev/null
