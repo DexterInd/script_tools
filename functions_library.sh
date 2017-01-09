@@ -65,6 +65,7 @@ insert_before_line_in_file() {
     sudo sed -i "/$2/i $1" $3
   fi
 }
+
 add_line_to_end_of_file() {
   # first parameter is what to add
   # second parameter is filename
@@ -72,6 +73,23 @@ add_line_to_end_of_file() {
   then
     echo $1 >> $2
   fi 
+}
+
+replace_this_with_that_in_file(){
+  # first argument: what needs to be replaced
+  # second argument: the new stuff
+  # third argument: the file in question
+  # returns 0 if file exists (may or may not have succeeded in the substitution)
+  # return 1 if file does not exists
+  feedback "replacing $1 with $2 in $3"
+  if file_exists "$3"
+  then
+    echo "sudo sed -i 's/$1/$2/g' $3"
+    sudo sed -i 's/$1/$2/g' $3
+    return 0
+  else
+    return 1
+  fi
 }
 
 find_in_file() {
@@ -95,7 +113,7 @@ file_exists() {
   # Only one argument: the file to look for
   # returns 0 on SUCCESS
   # returns 1 on FAIL
-  if [ -f $1 ]
+  if [ -f "$1" ]
   then
     return 0
   else
@@ -117,22 +135,19 @@ file_does_not_exists(){
   # Only one argument: the file to look for
   # returns 0 on SUCCESS
   # returns 1 on FAIL
-  feedback "looking for $1"
   if [ ! -f $1 ]
   then
-    feedback "not found $1"
     return 0
   else
-    feedback "found $1"
     return 1
   fi
 }
 
 delete_file (){
   # One parameter only: the file to delete
-  if file_exists $1
+  if file_exists "$1"
   then
-    sudo rm $1
+    sudo rm "$1"
   fi
 }
 
@@ -176,8 +191,8 @@ folder_exists(){
 }
 
 delete_folder(){
-  if folder_exists $1
+  if folder_exists "$1"
   then
-    sudo rm -r $1
+    sudo rm -r "$1"
   fi
 }
