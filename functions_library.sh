@@ -49,7 +49,6 @@ delete_line_from_file() {
   if [ -f $2 ]
   then
     sudo sed -i "/$1/d" $2
-    feedback "deleted $1 from $2"
   fi
 }
 
@@ -58,10 +57,8 @@ insert_before_line_in_file() {
   # second argument is a partial match of the line we need to find to insert before
   # third arument is filename
 
-  feedback "Inserting $1 before $2 in $3"
   if [ -f $3 ]
   then
-    feedback "sudo sed -i '/$2/i $1' $3"
     sudo sed -i "/$2/i $1" $3
   fi
 }
@@ -85,7 +82,7 @@ replace_first_this_with_that_in_file() {
     sudo sed -i '/$1/c\$2' $3
      return 0
   else
-      feedback "Line - $1 not found"
+      #feedback "Line - $1 not found"
       return 1
   fi
 }
@@ -109,7 +106,6 @@ replace_all_this_with_that_in_file(){
 find_in_file() {
   # first argument is what to look for
   # second argument is the filename
-  feedback "looking for $1 in $2"
   if grep -q "$1" $2
   then
     return 0
@@ -186,7 +182,7 @@ wget_file() {
 #
 #########################################################################
 create_folder(){
-  if ! folder_exists
+  if ! folder_exists "$1"
   then
     sudo mkdir "$1"
   fi
