@@ -71,21 +71,35 @@ add_line_to_end_of_file() {
   # second parameter is filename
   if [ -f $2 ]
   then
-    echo $1 >> $2
+    echo "$1" >> "$2"
   fi 
 }
 
-replace_this_with_that_in_file(){
+replace_first_this_with_that_in_file() {
+  # replaces the first occurence
+  # first parameter is the string to be replaced
+  # second parameter is the string which replaces
+  # third parameter is the filename
+  if grep -q "$1" $3
+  then
+    sudo sed -i '/$1/c\$2' $3
+     return 0
+  else
+      feedback "Line - $1 not found"
+      return 1
+  fi
+}
+replace_all_this_with_that_in_file(){
+  # does a global replace
   # first argument: what needs to be replaced
   # second argument: the new stuff
   # third argument: the file in question
   # returns 0 if file exists (may or may not have succeeded in the substitution)
   # return 1 if file does not exists
-  feedback "replacing $1 with $2 in $3"
+  #feedback "replacing $1 with $2 in $3"
   if file_exists "$3"
   then
-    echo "sudo sed -i 's/$1/$2/g' $3"
-    sudo sed -i 's/$1/$2/g' $3
+    sudo sed -i "s/$1/$2/g" "$3"
     return 0
   else
     return 1
@@ -174,7 +188,7 @@ wget_file() {
 create_folder(){
   if ! folder_exists
   then
-    mkdir $1
+    sudo mkdir "$1"
   fi
 }
 
@@ -182,7 +196,7 @@ folder_exists(){
   # Only one argument: the folder to look for
   # returns 0 on SUCCESS
   # returns 1 on FAIL
-  if [ -d $1 ]
+  if [ -d "$1" ]
   then
     return 0
   else
