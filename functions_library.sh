@@ -153,9 +153,9 @@ file_exists_in_folder(){
   # can only be run using bash, not sh
   # first argument: file to look for
   # second argument: folder path
-  pushd $2
-  status = file_exists
-  popd
+  pushd $2 > /dev/null
+  status = file_exists $1
+  popd > /dev/null
   return status
 }
 
