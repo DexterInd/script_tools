@@ -49,7 +49,6 @@ delete_line_from_file() {
   if [ -f $2 ]
   then
     sudo sed -i "/$1/d" $2
-    feedback "deleted $1 from $2"
   fi
 }
 
@@ -58,26 +57,55 @@ insert_before_line_in_file() {
   # second argument is a partial match of the line we need to find to insert before
   # third arument is filename
 
-  feedback "Inserting $1 before $2 in $3"
   if [ -f $3 ]
   then
-    feedback "sudo sed -i '/$2/i $1' $3"
     sudo sed -i "/$2/i $1" $3
   fi
 }
+
 add_line_to_end_of_file() {
   # first parameter is what to add
   # second parameter is filename
   if [ -f $2 ]
   then
-    echo $1 >> $2
+    echo "$1" >> "$2"
   fi 
+}
+
+replace_first_this_with_that_in_file() {
+  # replaces the first occurence
+  # first parameter is the string to be replaced
+  # second parameter is the string which replaces
+  # third parameter is the filename
+  if grep -q "$1" $3
+  then
+    sudo sed -i '/$1/c\$2' $3
+     return 0
+  else
+      #feedback "Line - $1 not found"
+      return 1
+  fi
+}
+replace_all_this_with_that_in_file(){
+  # does a global replace
+  # first argument: what needs to be replaced
+  # second argument: the new stuff
+  # third argument: the file in question
+  # returns 0 if file exists (may or may not have succeeded in the substitution)
+  # return 1 if file does not exists
+  #feedback "replacing $1 with $2 in $3"
+  if file_exists "$3"
+  then
+    sudo sed -i "s/$1/$2/g" "$3"
+    return 0
+  else
+    return 1
+  fi
 }
 
 find_in_file() {
   # first argument is what to look for
   # second argument is the filename
-  feedback "looking for $1 in $2"
   if grep -q "$1" $2
   then
     return 0
@@ -95,7 +123,7 @@ file_exists() {
   # Only one argument: the file to look for
   # returns 0 on SUCCESS
   # returns 1 on FAIL
-  if [ -f $1 ]
+  if [ -f "$1" ]
   then
     return 0
   else
@@ -117,22 +145,19 @@ file_does_not_exists(){
   # Only one argument: the file to look for
   # returns 0 on SUCCESS
   # returns 1 on FAIL
-  feedback "looking for $1"
   if [ ! -f $1 ]
   then
-    feedback "not found $1"
     return 0
   else
-    feedback "found $1"
     return 1
   fi
 }
 
 delete_file (){
   # One parameter only: the file to delete
-  if file_exists $1
+  if file_exists "$1"
   then
-    sudo rm $1
+    sudo rm "$1"
   fi
 }
 
@@ -157,9 +182,9 @@ wget_file() {
 #
 #########################################################################
 create_folder(){
-  if ! folder_exists
+  if ! folder_exists "$1"
   then
-    mkdir $1
+    sudo mkdir "$1"
   fi
 }
 
@@ -167,7 +192,7 @@ folder_exists(){
   # Only one argument: the folder to look for
   # returns 0 on SUCCESS
   # returns 1 on FAIL
-  if [ -d $1 ]
+  if [ -d "$1" ]
   then
     return 0
   else
@@ -176,8 +201,8 @@ folder_exists(){
 }
 
 delete_folder(){
-  if folder_exists $1
+  if folder_exists "$1"
   then
-    sudo rm -r $1
+    sudo rm -r "$1"
   fi
 }
