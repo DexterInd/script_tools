@@ -1,5 +1,5 @@
 #!/bin/bash
-source /home/pi/di_update/Raspbian_For_Robots/upd_script/functions_library.sh
+source /home/pi/Dexter/lib/Dexter/script_tools/functions_library.sh
 
 PIHOME=/home/pi
 DEXTER=Dexter
