@@ -37,6 +37,24 @@ feedback() {
   echo -e "$(tput setaf 3)$1$(tput sgr0)"
 }
 
+# Function checks out branch if BRANCH is defined.
+change_branch() {
+  # first and only parameter is the branch to checkout
+
+  # -z tests for zero length. 
+    if [ -z ${1+x} ]; then 
+        echo "Working from main branch."; 
+    else 
+        echo "Working from $1 branch";
+        # sudo git checkout -b $BRANCH
+        # the -b creates a branch if it doesn't exist
+        # this leads to a fatal error msg being displayed to the user
+        # is there any case where we can to create the branch here???
+        # https://github.com/tldr-pages/tldr/blob/master/pages/common/git-checkout.md
+        sudo git checkout $1
+    fi
+}
+
 #########################################################################
 #
 #  FILE EDITION
@@ -135,9 +153,9 @@ file_exists_in_folder(){
   # can only be run using bash, not sh
   # first argument: file to look for
   # second argument: folder path
-  pushd $2
-  status = file_exists
-  popd
+  pushd $2 > /dev/null
+  status = file_exists $1
+  popd > /dev/null
   return status
 }
 
