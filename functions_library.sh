@@ -97,7 +97,7 @@ replace_first_this_with_that_in_file() {
   # third parameter is the filename
   if grep -q "$1" $3
   then
-    sudo sed -i '/$1/c\$2' $3
+    sudo sed -i "s/$1/$2/" "$3"
      return 0
   else
       #feedback "Line - $1 not found"
