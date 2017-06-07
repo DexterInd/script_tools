@@ -132,6 +132,18 @@ find_in_file() {
   fi
 }
 
+find_in_file_strict() {
+  # first argument is what to look for
+  # second argument is the filename
+  # looks for a complete word and not part of a word
+  if grep -w -q "$1[\D]" $2
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
 #########################################################################
 #
 #  FILE HANDLING - detection, deletion

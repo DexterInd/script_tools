@@ -164,7 +164,7 @@ def add_robot(in_robot):
 
     debug_print("Found {}".format(in_robot))
     if detected_robot != "None":
-        detected_robot += "_"
+        detected_robot += "-"
     else:
         # get rid of the None as we do have something to add
         detected_robot = ""
@@ -176,6 +176,7 @@ def autodetect():
     '''
     Returns a string
     Possible strings are:
+    GoPiGo3
     GoPiGo
     GoPiGo_PivotPi
     GrovePi
