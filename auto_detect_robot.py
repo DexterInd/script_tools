@@ -1,15 +1,16 @@
 from __future__ import print_function
 from __future__ import division
 
--'''
+'''
 THIS IS NOT A COPY OF ANOTHER FILE.
 --John (June 2017)
--'''
+'''
 
 import time     # import the time library for the sleep function
 from smbus import SMBus
 import os
 import serial
+from shutil import copyfile
 
 bus = SMBus(1)
 detected_robot = "None"
@@ -229,6 +230,33 @@ def remove_symlink(src):
     except:
         pass
 
+        
+def remove_control_panel(src):
+    try:
+        # For the GoPiGo, add the Control Panel Links
+        if src == "GoPiGo":
+            try:
+                os.remove('/home/pi/Desktop/gopigo3_control_panel.desktop') # Delete the GoPiGo3 file.
+                copyfile('/home/pi/Dexter/GoPiGo/Software/Python/control_panel/gopigo_control_panel.desktop', '/home/pi/Desktop/')
+            except OSError:
+                pass
+        
+        elif src == "GoPiGo3":
+            try:
+                os.remove('/home/pi/Desktop/gopigo_control_panel.desktop')
+                copyfile('/home/pi/Dexter/GoPiGo3/Software/Python/control_panel/gopigo_control_panel.desktop', '/home/pi/Desktop/')
+            except OSError:
+                print("Error Adding GoPiGo3 Control Panel Links")
+                pass
+        
+        # If neither of them are detected, then delete all the links.
+        else:
+            os.remove('/home/pi/Desktop/gopigo_control_panel.desktop')
+            os.remove('/home/pi/Desktop/gopigo3_control_panel.desktop')
+    except:
+        pass
+    
+    
 ##########################################################################
 ##########################################################################
 
@@ -252,6 +280,7 @@ if __name__ == '__main__':
             # In the case of a GoPiGo3, a false positive can be generated when there's GoPiGo3.
             # The GoPiGo3 can generate symlinks for both the GoPiGo and the GoPiGo3.  So remove 
             # the "GoPiGo" link if the "GoPiGo3" is found.  
+            remove_control_panel(detection)
             if detection == "GoPiGo":
                 if detection.find("3")!=0:
                     remove_symlink(detection)
