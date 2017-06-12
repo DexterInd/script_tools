@@ -6,6 +6,7 @@ THIS IS NOT A COPY OF ANOTHER FILE.
 --John (June 2017)
 '''
 
+import sys
 import time     # import the time library for the sleep function
 from smbus import SMBus
 import os
@@ -54,12 +55,13 @@ def find_gopigo():
     debug_print("Detecting GoPiGo")
     gopigo_address = 0x08
     try:
-        import GoPiGo
-        print("DETECTED GOPIGO");
+        import gopigo
+        # print("DETECTED GOPIGO");
         test_gopigo = bus.read_byte(gopigo_address)
         return True
     except:
-        print("NOT DETECTED GOPIGO")
+        # print("Unexpected error:", sys.exc_info()[0])
+        # print("NOT DETECTED GOPIGO")
         return False
 
 
@@ -165,7 +167,7 @@ def add_robot(in_robot):
 
     debug_print("Found {}".format(in_robot))
     if detected_robot != "None":
-        detected_robot += "_"
+        detected_robot += "-"
     else:
         # get rid of the None as we do have something to add
         detected_robot = ""
@@ -232,30 +234,35 @@ def remove_symlink(src):
 
         
 def remove_control_panel(src):
-    try:
-        # For the GoPiGo, add the Control Panel Links
-        if src == "GoPiGo":
-            try:
-                os.remove('/home/pi/Desktop/gopigo3_control_panel.desktop') # Delete the GoPiGo3 file.
-                copyfile('/home/pi/Dexter/GoPiGo/Software/Python/control_panel/gopigo_control_panel.desktop', '/home/pi/Desktop/')
-            except OSError:
-                pass
-        
-        elif src == "GoPiGo3":
-            try:
-                os.remove('/home/pi/Desktop/gopigo_control_panel.desktop')
-                copyfile('/home/pi/Dexter/GoPiGo3/Software/Python/control_panel/gopigo_control_panel.desktop', '/home/pi/Desktop/')
-            except OSError:
-                print("Error Adding GoPiGo3 Control Panel Links")
-                pass
-        
-        # If neither of them are detected, then delete all the links.
-        else:
-            os.remove('/home/pi/Desktop/gopigo_control_panel.desktop')
-            os.remove('/home/pi/Desktop/gopigo3_control_panel.desktop')
-    except:
-        pass
+    GoPiGo_3_Src_File = '/home/pi/Dexter/GoPiGo3/Software/Python/Examples/Control_Panel/gopigo3_control_panel.desktop'
+    GoPiGo_2_Src_File = '/home/pi/Dexter/GoPiGo/Software/Python/control_panel/gopigo_control_panel.desktop'
+    GoPiGo_3_Dsk_File = '/home/pi/Desktop/gopigo3_control_panel.desktop'
+    GoPiGo_2_Dsk_File = '/home/pi/Desktop/gopigo_control_panel.desktop'
     
+    if os.path.exists(GoPiGo_3_Dsk_File):
+        os.remove(GoPiGo_3_Dsk_File) # Delete the GoPiGo3 file.
+    else:
+        print("GoPiGo3 File Not Found.")
+
+    if os.path.exists(GoPiGo_2_Dsk_File):
+        os.remove(GoPiGo_2_Dsk_File)
+    else:
+        print("GoPiGo2 File Not Found.")
+
+
+    # For the GoPiGo, add the Control Panel Links
+    if src == "GoPiGo":
+        try:
+            copyfile(GoPiGo_2_Src_File, GoPiGo_2_Dsk_File)
+        except OSError as e:
+            print("No GoPiGo control panel found.")
+            print(e)
+    if src == "GoPiGo3":
+        try:
+            copyfile(GoPiGo_3_Src_File, GoPiGo_3_Dsk_File)
+        except OSError as e:
+            print("Error Adding GoPiGo3 Control Panel Links")
+            print(e)
     
 ##########################################################################
 ##########################################################################
