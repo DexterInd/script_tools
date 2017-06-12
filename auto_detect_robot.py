@@ -234,21 +234,22 @@ def remove_symlink(src):
 
         
 def remove_control_panel(src):
-    GoPiGo_3_Src_File = '/home/pi/Dexter/GoPiGo3/Software/Python/Examples/Control_Panel/gopigo3_control_panel.desktop'
-    GoPiGo_2_Src_File = '/home/pi/Dexter/GoPiGo/Software/Python/control_panel/gopigo_control_panel.desktop'
-    GoPiGo_3_Dsk_File = '/home/pi/Desktop/gopigo3_control_panel.desktop'
-    GoPiGo_2_Dsk_File = '/home/pi/Desktop/gopigo_control_panel.desktop'
-    
-    if os.path.exists(GoPiGo_3_Dsk_File):
+    GoPiGo_3_Src_File = '''/home/pi/Dexter/GoPiGo3/Software/Python/Examples/Control_Panel/gopigo3_control_panel.desktop'''
+    GoPiGo_2_Src_File = '''/home/pi/Dexter/GoPiGo/Software/Python/control_panel/gopigo_control_panel.desktop'''
+    GoPiGo_3_Dsk_File = '''/home/pi/Desktop/gopigo3_control_panel.desktop'''
+    GoPiGo_2_Dsk_File = '''/home/pi/Desktop/gopigo_control_panel.desktop'''
+
+    try:
         os.remove(GoPiGo_3_Dsk_File) # Delete the GoPiGo3 file.
-    else:
+    except OSError as e:
         print("GoPiGo3 File Not Found.")
+        print(e)
 
-    if os.path.exists(GoPiGo_2_Dsk_File):
+    try:
         os.remove(GoPiGo_2_Dsk_File)
-    else:
+    except OSError as e:
         print("GoPiGo2 File Not Found.")
-
+        print(e)
 
     # For the GoPiGo, add the Control Panel Links
     if src == "GoPiGo":
@@ -277,7 +278,12 @@ if __name__ == '__main__':
             outfile.write('\n')
     except:
         print("Couldn't write to ~/Dexter/detected_robot.txt")
-
+     
+    try:
+        remove_control_panel(detected_robot)
+    except OSError as e:
+        print("Control Panel setup failed. ", e)
+        
     # adjust softlinks on desktop
     for detection in detectable_robots:
         if detected_robot.find(detection)==0 or detected_robot.find("None")==0:
@@ -287,7 +293,7 @@ if __name__ == '__main__':
             # In the case of a GoPiGo3, a false positive can be generated when there's GoPiGo3.
             # The GoPiGo3 can generate symlinks for both the GoPiGo and the GoPiGo3.  So remove 
             # the "GoPiGo" link if the "GoPiGo3" is found.  
-            remove_control_panel(detection)
+
             if detection == "GoPiGo":
                 if detection.find("3")!=0:
                     remove_symlink(detection)
