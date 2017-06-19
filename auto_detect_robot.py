@@ -246,18 +246,25 @@ def remove_control_panel(src):
     GoPiGo_3_Dsk_File = '''/home/pi/Desktop/gopigo3_control_panel.desktop'''
     GoPiGo_2_Dsk_File = '''/home/pi/Desktop/gopigo_control_panel.desktop'''
 
-    remove_desktop_control(GoPiGo_2_Dsk_File)
-    remove_desktop_control(GoPiGo_3_Dsk_File)
-
     # For the GoPiGo, add the Control Panel Links
     if src == "GoPiGo":
         try:
+            # Remove the control panel links
+            remove_desktop_control(GoPiGo_2_Dsk_File)
+            remove_desktop_control(GoPiGo_3_Dsk_File)
+            # Copy the GoPiGo2 Control Panel Link In
             copyfile(GoPiGo_2_Src_File, GoPiGo_2_Dsk_File)
+            print("GoPiGo2 Control Panel Added.")
         except OSError as e:
             print("No GoPiGo control panel found.")
             print(e)
     if src == "GoPiGo3":
         try:
+            # Remove the control panel links
+            remove_desktop_control(GoPiGo_2_Dsk_File)
+            remove_desktop_control(GoPiGo_3_Dsk_File)
+            print("GoPiGo3 Control Panel Added.")
+            # Copy the GoPiGo3 Control Panel in place
             copyfile(GoPiGo_3_Src_File, GoPiGo_3_Dsk_File)
         except OSError as e:
             print("Error Adding GoPiGo3 Control Panel Links")
@@ -285,18 +292,19 @@ if __name__ == '__main__':
             outfile.write('\n')
     except:
         print("Couldn't write to ~/Dexter/detected_robot.txt")
-     
-    try:
-        remove_control_panel(detected_robot)
-    except OSError as e:
-        print("Control Panel setup failed. ", e)
-        
-    # adjust softlinks on desktop
+    
+    # Remove all the symlinks to robots on the Desktop
     for detection in detectable_robots:
-        #if detected_robot.find(detection)==0 or detected_robot.find("None")==0:
-        if find_word(detection, detected_robot):
-            add_symlink(detection)
+        remove_symlink(detection)
 
-        else:
-            remove_symlink(detection)
-            print("Remove " + detection)
+    # Add back all the symlinks to robots that have been detected
+    detected_robot_list = detected_robot.split("-")
+    # print("Detected Robots: " + str(detected_robot_list))
+    for detection in detected_robot_list:
+        add_symlink(detection)
+        # print("Add " + detection)
+    
+    # Add control panel for the GoPiGo that is detected.
+    for detection in detected_robot_list:
+        # print("Remove Control Panel: " + detection)
+        remove_control_panel(detection)
