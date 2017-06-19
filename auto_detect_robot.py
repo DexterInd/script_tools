@@ -12,6 +12,7 @@ from smbus import SMBus
 import os
 import serial
 from shutil import copyfile
+import re
 
 bus = SMBus(1)
 detected_robot = "None"
@@ -232,24 +233,21 @@ def remove_symlink(src):
     except:
         pass
 
-        
+def remove_desktop_control(file):
+    try:
+        os.remove(file) # Delete the GoPiGo3 file.
+    except OSError as e:
+        print("File Not Found:" + file + "  " + str(e))
+        # print(e)
+
 def remove_control_panel(src):
     GoPiGo_3_Src_File = '''/home/pi/Dexter/GoPiGo3/Software/Python/Examples/Control_Panel/gopigo3_control_panel.desktop'''
     GoPiGo_2_Src_File = '''/home/pi/Dexter/GoPiGo/Software/Python/control_panel/gopigo_control_panel.desktop'''
     GoPiGo_3_Dsk_File = '''/home/pi/Desktop/gopigo3_control_panel.desktop'''
     GoPiGo_2_Dsk_File = '''/home/pi/Desktop/gopigo_control_panel.desktop'''
 
-    try:
-        os.remove(GoPiGo_3_Dsk_File) # Delete the GoPiGo3 file.
-    except OSError as e:
-        print("GoPiGo3 File Not Found.")
-        print(e)
-
-    try:
-        os.remove(GoPiGo_2_Dsk_File)
-    except OSError as e:
-        print("GoPiGo2 File Not Found.")
-        print(e)
+    remove_desktop_control(GoPiGo_2_Dsk_File)
+    remove_desktop_control(GoPiGo_3_Dsk_File)
 
     # For the GoPiGo, add the Control Panel Links
     if src == "GoPiGo":
@@ -265,6 +263,15 @@ def remove_control_panel(src):
             print("Error Adding GoPiGo3 Control Panel Links")
             print(e)
     
+# Adding regex test because we need to discerne between "GoPiGo" and "GoPiGo3"
+# Borrowed from stack overflow : https://stackoverflow.com/questions/4173787/string-exact-match
+def find_word(text, search):
+   result = re.findall('\\b'+search+'\\b', text, flags=re.IGNORECASE)
+   if len(result)>0:
+      return True
+   else:
+      return False
+
 ##########################################################################
 ##########################################################################
 
@@ -286,17 +293,10 @@ if __name__ == '__main__':
         
     # adjust softlinks on desktop
     for detection in detectable_robots:
-        if detected_robot.find(detection)==0 or detected_robot.find("None")==0:
-
+        #if detected_robot.find(detection)==0 or detected_robot.find("None")==0:
+        if find_word(detection, detected_robot):
             add_symlink(detection)
-
-            # In the case of a GoPiGo3, a false positive can be generated when there's GoPiGo3.
-            # The GoPiGo3 can generate symlinks for both the GoPiGo and the GoPiGo3.  So remove 
-            # the "GoPiGo" link if the "GoPiGo3" is found.  
-
-            if detection == "GoPiGo":
-                if detection.find("3")!=0:
-                    remove_symlink(detection)
 
         else:
             remove_symlink(detection)
+            print("Remove " + detection)
