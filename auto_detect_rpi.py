@@ -81,9 +81,13 @@ RPI_VARIANTS = {
 RPI_MODEL_AND_PCBREV = 0
 RPI_GENERATION_MODEL = 1
 
-# returns slightly more descriptive information on the hardware revision of the Raspberry Pi
-# e.g. "Pi 2 Model B v1.1" etc
 def getRPIHardwareRevCode():
+    """
+    Returns slightly more descriptive information on the hardware revision of the Raspberry Pi
+    Examples of strings returned : "Model B Rev 2", "Model A+", "Pi 3 Model B", etc
+    Look into the dictionary to see all the possible variants
+    """
+
     bash_command = "sudo cat /proc/cpuinfo | grep Revision | awk '{print $3}'"
     revision = sendBashCommand(bash_command)
     rpi_description = ""
@@ -94,9 +98,16 @@ def getRPIHardwareRevCode():
 
     return rpi_description
 
-# returns the Raspberry Pi's generation Model
-# e.g. "RPI2", "RPI3" etc
 def getRPIGenerationCode():
+    """
+    Returns the Raspberry Pi's generation model
+    Depending on the Raspberry Pi's model, the function can return the following strings:
+    "RPI0"
+    "RPI1"
+    "RPi2"
+    "RPI3"
+    "RPI-COMPUTE-MODULE"
+    """
 
     bash_command = "sudo cat /proc/cpuinfo | grep Revision | awk '{print $3}'"
     revision = sendBashCommand(bash_command)
@@ -108,9 +119,11 @@ def getRPIGenerationCode():
 
     return rpi_description
 
-# takes a string of commands and spawns commands inside linux's environment
-# and returns the output of that process, if provided
-def sendBashCommand(bash_command)
+def sendBashCommand(bash_command):
+    """
+    Takes a string of commands and spawns commands inside linux's environment.
+    Returns the stdout of that process, if provided, otherwise None is returned
+    """
 
 	process = subprocess.Popen(bash_command.split(), stdout = subprocess.PIPE)
 
