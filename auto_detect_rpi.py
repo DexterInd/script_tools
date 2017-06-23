@@ -89,10 +89,10 @@ def getRPIHardwareRevCode():
     rpi_description = ""
 
     if not cpuinfo_lines is None:
-        serial_line = cpuinfo_lines[-1]
-        serial = serial_line.split(":")[-1]
-        serial = serial.rstrip()
-        rpi_description = RPI_VARIANTS[serial][RPI_MODEL_AND_PCBREV]
+        revision_line = cpuinfo_lines[-2]
+        revision = revision_line.split(":")[-1]
+        revision = revision.rstrip()
+        rpi_description = RPI_VARIANTS[revision][RPI_MODEL_AND_PCBREV]
 
     return rpi_description
 
@@ -111,10 +111,10 @@ def getRPIGenerationCode():
     rpi_description = ""
 
     if not cpuinfo_lines is None:
-        serial_line = cpuinfo_lines[-1]
-        serial = serial_line.split(":")[-1]
-        serial = serial.rstrip()
-        rpi_description = RPI_VARIANTS[serial][RPI_GENERATION_MODEL]
+        revision_line = cpuinfo_lines[-2]
+        revision = revision_line.split(":")[-1]
+        revision = revision.rstrip()
+        rpi_description = RPI_VARIANTS[revision][RPI_GENERATION_MODEL]
 
     return rpi_description
 
