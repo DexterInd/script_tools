@@ -91,7 +91,7 @@ def getRPIHardwareRevCode():
     if not cpuinfo_lines is None:
         revision_line = cpuinfo_lines[-2]
         revision = revision_line.split(":")[-1]
-        revision = revision.rstrip()
+        revision = revision.strip()
         rpi_description = RPI_VARIANTS[revision][RPI_MODEL_AND_PCBREV]
 
     return rpi_description
@@ -113,7 +113,7 @@ def getRPIGenerationCode():
     if not cpuinfo_lines is None:
         revision_line = cpuinfo_lines[-2]
         revision = revision_line.split(":")[-1]
-        revision = revision.rstrip()
+        revision = revision.strip()
         rpi_description = RPI_VARIANTS[revision][RPI_GENERATION_MODEL]
 
     return rpi_description
