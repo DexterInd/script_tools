@@ -81,10 +81,10 @@ RPI_GENERATION_MODEL = 1
 
 def getRPIHardwareRevCode():
     """
-    Returns slightly more descriptive information on the hardware revision of the Raspberry Pi.
-    If it can't find anything, it returns "NOT_FOUND"
-    If there's an error while reading the file, it returns a None
-    Examples of strings returned : "Model B Rev 2", "Model A+", "Pi 3 Model B", etc
+    Returns the hardware revision of the Raspberry Pi.
+    If it can't find anything, it returns "NOT_FOUND".
+    If there's an error while reading the file, it returns a None.
+    Examples of strings returned : "Model B Rev 2", "Model A+", "Pi 3 Model B", etc.
     Look into the dictionary to see all the possible variants.
     """
     cpuinfo_lines = readLinesFromFile("/proc/cpuinfo")
@@ -105,8 +105,8 @@ def getRPIHardwareRevCode():
 def getRPIGenerationCode():
     """
     Returns the Raspberry Pi's generation model.
-    If it can't find anything, it returns "NOT_FOUND"
-    If there's an error while reading the file, it returns a None
+    If it can't find anything, it returns "NOT_FOUND".
+    If there's an error while reading the file, it returns a None.
     Depending on the Raspberry Pi's model, the function can return the following strings:
     "RPI0"
     "RPI1"
