@@ -25,8 +25,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import subprocess
-
 # RPI_VARIANTS was inspired from http://www.raspberrypi-spy.co.uk/2012/09/checking-your-raspberry-pi-board-version/
 # This module is meant for retrieving the Raspberry Pi's generation model, PCB model (dimension-wise) and PCB revision
 # Works with Python 3 & 2 !!!
@@ -83,24 +81,24 @@ RPI_GENERATION_MODEL = 1
 
 def getRPIHardwareRevCode():
     """
-    Returns slightly more descriptive information on the hardware revision of the Raspberry Pi
+    Returns slightly more descriptive information on the hardware revision of the Raspberry Pi.
     Examples of strings returned : "Model B Rev 2", "Model A+", "Pi 3 Model B", etc
-    Look into the dictionary to see all the possible variants
+    Look into the dictionary to see all the possible variants.
     """
-
-    bash_command = "sudo cat /proc/cpuinfo | grep Revision | awk '{print $3}'"
-    revision = sendBashCommand(bash_command)
+    cpuinfo_lines = readLinesFromFile("/proc/cpuinfo")
     rpi_description = ""
 
-    # if stdout has something
-    if not revision is None:
-        rpi_description = RPI_VARIANTS[revision][RPI_MODEL_AND_PCBREV]
+    if not cpuinfo_lines is None:
+        serial_line = cpuinfo_lines[-1]
+        serial = serial_line.split(":")[-1]
+        serial = serial.rstrip()
+        rpi_description = RPI_VARIANTS[serial][RPI_MODEL_AND_PCBREV]
 
     return rpi_description
 
 def getRPIGenerationCode():
     """
-    Returns the Raspberry Pi's generation model
+    Returns the Raspberry Pi's generation model.
     Depending on the Raspberry Pi's model, the function can return the following strings:
     "RPI0"
     "RPI1"
@@ -109,26 +107,27 @@ def getRPIGenerationCode():
     "RPI-COMPUTE-MODULE"
     """
 
-    bash_command = "sudo cat /proc/cpuinfo | grep Revision | awk '{print $3}'"
-    revision = sendBashCommand(bash_command)
+    cpuinfo_lines = readLinesFromFile("/proc/cpuinfo")
     rpi_description = ""
 
-    # if stdout has something
-    if not revision is None:
-        rpi_description = RPI_VARIANTS[revision][RPI_GENERATION_MODEL]
+    if not cpuinfo_lines is None:
+        serial_line = cpuinfo_lines[-1]
+        serial = serial_line.split(":")[-1]
+        serial = serial.rstrip()
+        rpi_description = RPI_VARIANTS[serial][RPI_GENERATION_MODEL]
 
     return rpi_description
 
-def sendBashCommand(bash_command):
+def readLinesFromFile(filename):
     """
-    Takes a string of commands and spawns commands inside linux's environment.
-    Returns the stdout of that process, if provided, otherwise None is returned
+    Returns the read file as a list of strings.
+    Each element of the list represents a line.
+    On error it returns None.
     """
+    try:
+        with open(filename, "r") as input_file:
+            lines = input_file.readlines()
+        return lines
 
-	process = subprocess.Popen(bash_command.split(), stdout = subprocess.PIPE)
-
-    # use communicate to read data from stdout - index 0 is for stdout and 1 is for stderr
-    # don't use this function if the data size is large or unlimited
-    # useeful when trying to avoid deadlocks
-	output = process.communicate()[0]
-	return output
+    except EnvironmentError:
+        return None
