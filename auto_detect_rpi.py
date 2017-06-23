@@ -82,6 +82,8 @@ RPI_GENERATION_MODEL = 1
 def getRPIHardwareRevCode():
     """
     Returns slightly more descriptive information on the hardware revision of the Raspberry Pi.
+    If it can't find anything, it returns "NOT_FOUND"
+    If there's an error while reading the file, it returns a None
     Examples of strings returned : "Model B Rev 2", "Model A+", "Pi 3 Model B", etc
     Look into the dictionary to see all the possible variants.
     """
@@ -92,13 +94,19 @@ def getRPIHardwareRevCode():
         revision_line = cpuinfo_lines[-2]
         revision = revision_line.split(":")[-1]
         revision = revision.strip()
-        rpi_description = RPI_VARIANTS[revision][RPI_MODEL_AND_PCBREV]
+
+        if revision in RPI_VARIANTS.keys():
+            rpi_description = RPI_VARIANTS[revision][RPI_MODEL_AND_PCBREV]
+        else:
+            rpi_description = "NOT_FOUND"
 
     return rpi_description
 
 def getRPIGenerationCode():
     """
     Returns the Raspberry Pi's generation model.
+    If it can't find anything, it returns "NOT_FOUND"
+    If there's an error while reading the file, it returns a None
     Depending on the Raspberry Pi's model, the function can return the following strings:
     "RPI0"
     "RPI1"
@@ -114,7 +122,11 @@ def getRPIGenerationCode():
         revision_line = cpuinfo_lines[-2]
         revision = revision_line.split(":")[-1]
         revision = revision.strip()
-        rpi_description = RPI_VARIANTS[revision][RPI_GENERATION_MODEL]
+
+        if revision in RPI_VARIANTS.keys():
+            rpi_description = RPI_VARIANTS[revision][RPI_GENERATION_MODEL]
+        else:
+            rpi_description = "NOT_FOUND"
 
     return rpi_description
 
