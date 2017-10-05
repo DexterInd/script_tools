@@ -14,26 +14,26 @@ LIB=lib
 SCRIPT=script_tools
 
 pushd $PIHOME > /dev/null
-result=${PWD##*/} 
+result=${PWD##*/}
 # check if ~/Dexter exists, if not create it
 if [ ! -d $DEXTER ] ; then
     mkdir $DEXTER
 fi
 # go into $DEXTER
-cd $DEXTER
+cd $PIHOME/$DEXTER
 
 
 # check if /home/pi/Dexter/lib exists, if not create it
 if [ ! -d $LIB ] ; then
     mkdir $LIB
 fi
-cd $LIB
+cd $PIHOME/$DEXTER/$LIB
 
 # check if /home/pi/Dexter/lib/Dexter exists, if not create it
 if [ ! -d $DEXTER ] ; then
     mkdir $DEXTER
 fi
-cd $DEXTER
+cd $PIHOME/$DEXTER/$LIB/$DEXTER
 
 
 # check if /home/pi/Dexter/lib/script_tools exists
@@ -43,8 +43,11 @@ if [ ! -d $SCRIPT ] ; then
     # clone the folder
     sudo git clone --quiet https://github.com/DexterInd/script_tools.git
 else
-    cd $SCRIPT
+    cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
     sudo git pull --quiet
 fi
+
+cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
+sudo python autodetect_setup.py install
 
 popd > /dev/null
