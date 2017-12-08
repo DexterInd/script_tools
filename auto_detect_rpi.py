@@ -69,7 +69,7 @@ RPI_VARIANTS = {
 
 "900093" : ["Pi Zero v1.3", "RPI0"],
 
-"0x9000C1" : ["Pi Zero W", "RPI0"],
+"9000C1" : ["Pi Zero W", "RPI0"],
 
 "a02082" : ["Pi 3 Model B", "RPI3"],
 "a22082" : ["Pi 3 Model B", "RPI3"],
