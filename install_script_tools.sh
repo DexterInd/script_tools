@@ -41,13 +41,13 @@ cd $PIHOME/$DEXTER/$LIB/$DEXTER
 # if not, clone the folder
 if [ ! -d $SCRIPT ] ; then
     # clone the folder
-    sudo git clone --quiet https://github.com/DexterInd/script_tools.git
+    git clone --quiet https://github.com/DexterInd/script_tools.git
 else
     cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
-    sudo git pull --quiet
+    git pull --quiet
 fi
 
 cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
-sudo python autodetect_setup.py install
+python autodetect_setup.py install
 
 popd > /dev/null
