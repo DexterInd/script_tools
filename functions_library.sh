@@ -1,7 +1,7 @@
 ##############################################################
 ##############################################################
-# 
-# A SERIES OF HELPER FUNCTIONS TO HELP OUT IN 
+#
+# A SERIES OF HELPER FUNCTIONS TO HELP OUT IN
 # HANDLING SCRIPTS THAT ARE GROWING IN COMPLEXITY
 #
 ##############################################################
@@ -41,17 +41,17 @@ feedback() {
 change_branch() {
   # first and only parameter is the branch to checkout
 
-  # -z tests for zero length. 
-    if [ -z ${1+x} ]; then 
-        echo "Working from main branch."; 
-    else 
+  # -z tests for zero length.
+    if [ -z ${1+x} ]; then
+        echo "Working from main branch.";
+    else
         echo "Working from $1 branch";
         # sudo git checkout -b $BRANCH
         # the -b creates a branch if it doesn't exist
         # this leads to a fatal error msg being displayed to the user
         # is there any case where we can to create the branch here???
         # https://github.com/tldr-pages/tldr/blob/master/pages/common/git-checkout.md
-        sudo git checkout $1
+        git checkout $1
     fi
 }
 
@@ -61,12 +61,12 @@ change_branch() {
 #
 #########################################################################
 delete_line_from_file() {
-  # first parameter is the string to be matched 
+  # first parameter is the string to be matched
   # the lines that contain that string will get deleted
   # second parameter is the filename
   if [ -f $2 ]
   then
-    sudo sed -i "/$1/d" $2
+    sed -i "/$1/d" $2
   fi
 }
 
@@ -77,7 +77,7 @@ insert_before_line_in_file() {
 
   if [ -f $3 ]
   then
-    sudo sed -i "/$2/i $1" $3
+    sed -i "/$2/i $1" $3
   fi
 }
 
@@ -87,7 +87,7 @@ add_line_to_end_of_file() {
   if [ -f $2 ]
   then
     echo "$1" >> "$2"
-  fi 
+  fi
 }
 
 replace_first_this_with_that_in_file() {
@@ -97,7 +97,7 @@ replace_first_this_with_that_in_file() {
   # third parameter is the filename
   if grep -q "$1" $3
   then
-    sudo sed -i "s/$1/$2/" "$3"
+     sed -i "s/$1/$2/" "$3"
      return 0
   else
       #feedback "Line - $1 not found"
@@ -114,7 +114,7 @@ replace_all_this_with_that_in_file(){
   #feedback "replacing $1 with $2 in $3"
   if file_exists "$3"
   then
-    sudo sed -i "s/$1/$2/g" "$3"
+    sed -i "s/$1/$2/g" "$3"
     return 0
   else
     return 1
@@ -187,7 +187,7 @@ delete_file (){
   # One parameter only: the file to delete
   if file_exists "$1"
   then
-    sudo rm "$1"
+    rm "$1"
   fi
 }
 
@@ -214,7 +214,7 @@ wget_file() {
 create_folder(){
   if ! folder_exists "$1"
   then
-    sudo mkdir "$1"
+    mkdir "$1"
   fi
 }
 
@@ -233,6 +233,6 @@ folder_exists(){
 delete_folder(){
   if folder_exists "$1"
   then
-    sudo rm -r "$1"
+    rm -r "$1"
   fi
 }
