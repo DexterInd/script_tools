@@ -28,5 +28,5 @@ setuptools.setup(
 	author="Dexter Industries",
 	url="http://www.dexterindustries.com/GoPiGo/",
 	py_modules=['auto_detect_robot', 'auto_detect_rpi'],
-	install_requires=['smbus2'],
+	install_requires=['smbus2', 'pyserial'],
 )
