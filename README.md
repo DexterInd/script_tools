@@ -10,7 +10,7 @@ sudo sh -c "curl -kL dexterindustries.com/update_tools | bash"
 
 For installing the python packages of `script_tools` without root privileges (except for anything else than comes with it), use the following command:
 ```
-curl -kL dexterindustris.com/update_tools | bash
+curl -kL dexterindustries.com/update_tools | bash
 ```
 
 # Updating
