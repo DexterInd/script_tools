@@ -3,14 +3,14 @@ Common installation scripts used in multiple products around the Dexter Industri
 
 # Installing
 
-For installing this package without root privileges, use the following command:
-```
-curl -kL dexterindustris.com/update_tools | bash
-```
-
 For installing this package with root privileges, use the following command:
 ```
 sudo sh -c "curl -kL dexterindustries.com/update_tools | bash"
+```
+
+For installing this package without root privileges, use the following command:
+```
+curl -kL dexterindustris.com/update_tools | bash
 ```
 
 # Updating
