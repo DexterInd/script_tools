@@ -49,6 +49,6 @@ fi
 
 cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
 sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
-python autodetect_setup.py install
+python setup.py install
 
 popd > /dev/null
