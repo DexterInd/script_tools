@@ -48,6 +48,6 @@ else
 fi
 
 cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
-sudo python autodetect_setup.py install
+sudo python setup.py install
 
 popd > /dev/null

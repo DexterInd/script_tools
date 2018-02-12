@@ -27,6 +27,6 @@ setuptools.setup(
 	description="Dexter Industries Robot Autodetection",
 	author="Dexter Industries",
 	url="http://www.dexterindustries.com/GoPiGo/",
-	py_modules=['auto_detect_robot', 'auto_detect_rpi'],
+	py_modules=['auto_detect_robot', 'auto_detect_rpi', 'i2c_mutex'],
 	#install_requires=open('requirements.txt').readlines(),
 )
