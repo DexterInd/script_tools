@@ -41,13 +41,14 @@ cd $PIHOME/$DEXTER/$LIB/$DEXTER
 # if not, clone the folder
 if [ ! -d $SCRIPT ] ; then
     # clone the folder
-    sudo git clone --quiet https://github.com/DexterInd/script_tools.git
+    git clone --quiet https://github.com/DexterInd/script_tools.git
 else
     cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
-    sudo git pull --quiet
+    git pull --quiet
 fi
 
 cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
-sudo python setup.py install
+sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
+python autodetect_setup.py install
 
 popd > /dev/null
