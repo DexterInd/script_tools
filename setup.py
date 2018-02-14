@@ -23,10 +23,10 @@ IF CHANGES ARE NEEDED EDIT THE ONE IN RfR THEN PULL IT HERE
 '''
 import setuptools
 setuptools.setup(
-	name="Dexter AutoDetection",
-	description="Dexter Industries Robot Autodetection",
+	name="Dexter AutoDetection and I2C Mutex",
+	description="Dexter Industries Robot Autodetection and I2C Mutex Security",
 	author="Dexter Industries",
 	url="http://www.dexterindustries.com/GoPiGo/",
-	py_modules=['auto_detect_robot', 'auto_detect_rpi'],
+	py_modules=['auto_detect_robot', 'auto_detect_rpi', 'I2C_mutex'],
 	install_requires=['smbus-cffi', 'pyserial'],
 )
