@@ -1,5 +1,6 @@
 import fcntl
 import time
+import os
 
 class Mutex(object):
 
@@ -40,6 +41,13 @@ class Mutex(object):
 
     def disableDebug(self):
         self.mutex_debug = False
+
+    def overall_mutex(self):
+        if os.path.isfile("/run/DexterOS_overall_mutex"):
+            return True
+        else:
+            return False
+
 
     def __enter__(self):
         if self.mutex_debug:
