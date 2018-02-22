@@ -50,8 +50,8 @@ class Mutex(object):
 
     def release_overall_mutex(self):
         try:
-            os.remove('/run/DexterOS_overall_mutex')
             self.overall_mutex_handle.close()
+            os.remove('/run/DexterOS_overall_mutex')
         except:
             pass
 
