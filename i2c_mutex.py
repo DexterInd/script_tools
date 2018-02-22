@@ -42,6 +42,19 @@ class Mutex(object):
     def disableDebug(self):
         self.mutex_debug = False
 
+    def set_overall_mutex(self):
+        try:
+            self.overall_mutex_handle = open('/run/DexterOS_overall_mutex', 'w')
+        except:
+            print("Must run with sudo")
+
+    def release_overall_mutex(self):
+        try:
+            os.remove('/run/DexterOS_overall_mutex')
+            self.overall_mutex_handle.close()
+        except:
+            pass
+
     def overall_mutex(self):
         if os.path.isfile("/run/DexterOS_overall_mutex"):
             return True
