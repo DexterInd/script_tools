@@ -8,6 +8,18 @@ class Mutex(object):
 
     def __init__(self, debug = False):
         self.mutex_debug = debug
+        self.DexterLockI2C_handle_filename = '/run/lock/DexterLockI2C'
+
+        # putting the following file in /run/lock so any user can have access
+        # putting it directly in /run requires sudo priviledges
+        self.DexterOverallMutex_filename = '/run/lock/DexterOS_overall_mutex'
+        
+        try:
+            open(self.DexterLockI2C_handle_filename, 'w')
+            if os.path.isfile(self.DexterLockI2C_handle_filename):
+                os.chmod(self.DexterLockI2C_handle_filename, 0o777)
+        except Exception as e:
+            pass
 
     def acquire(self):
         if self.mutex_debug:
@@ -16,7 +28,8 @@ class Mutex(object):
         acquired = False
         while not acquired:
             try:
-                self.DexterLockI2C_handle = open('/run/lock/DexterLockI2C', 'w')
+                self.DexterLockI2C_handle = open(self.DexterLockI2C_handle_filename, 'w')
+                os.chmod(self.DexterLockI2C_handle_filename, 0o777)
                 # lock
                 fcntl.lockf(self.DexterLockI2C_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 acquired = True
@@ -44,19 +57,24 @@ class Mutex(object):
 
     def set_overall_mutex(self):
         try:
-            self.overall_mutex_handle = open('/run/DexterOS_overall_mutex', 'w')
-        except:
-            print("Must run with sudo")
+            self.overall_mutex_handle = open(self.DexterOverallMutex_filename, 'w')
+            # debating whether we want to open up control of this file to any other process, 
+            # or if control should be limited to the process that started it.
+            # For now, open it up and let's see.
+            os.chmod(self.DexterOverallMutex_filename, 0o777)
+        except Exception as e:
+            print(e)
+            pass
 
     def release_overall_mutex(self):
         try:
             self.overall_mutex_handle.close()
-            os.remove('/run/DexterOS_overall_mutex')
+            os.remove(self.DexterOverallMutex_filename)
         except:
             pass
 
     def overall_mutex(self):
-        if os.path.isfile("/run/DexterOS_overall_mutex"):
+        if os.path.isfile(self.DexterOverallMutex_filename):
             return True
         else:
             return False
