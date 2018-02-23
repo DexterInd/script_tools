@@ -29,7 +29,6 @@ class Mutex(object):
         while not acquired:
             try:
                 self.DexterLockI2C_handle = open(self.DexterLockI2C_handle_filename, 'w')
-                os.chmod(self.DexterLockI2C_handle_filename, 0o777)
                 # lock
                 fcntl.lockf(self.DexterLockI2C_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 acquired = True
