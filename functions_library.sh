@@ -55,13 +55,69 @@ change_branch() {
     fi
 }
 
+###########################################################################
+#
+# USB drive stuff
+#
+###########################################################################
+
+# get_usb_mount_point - get the USB drive directory (the mount point), if present
+#
+# writes the path name to stdout
+#
+# Returns: 0 on success or 1 on failure
+
+
+get_usb_mount_point() {
+  # devmon mounts usb drive to /media/
+
+  active_drives=$(ls /dev/disk/by-partuuid/ | tr '\n' ' ' 2>/dev/null)
+  real_media_points=""
+  for active_drive in $active_drives
+  do
+    output=$(findmnt -rn -S PARTUUID="$active_drive" -o TARGET)
+    errcode=$?
+    if [[ $errcode == 0 ]]; then
+      real_media_points="$real_media_points$output "
+    fi
+  done
+  real_media_points=$(echo -e "$real_media_points")
+
+  OIFS="$IFS"
+  IFS=$'\n'
+  find /media -maxdepth 1 -mindepth 1 | while read media_point
+  do
+    # spaces in the compared strings must stay
+    if [[ "$real_media_points " = *"$media_point "* ]]; then
+      echo "$media_point"
+      return 0
+    fi
+  done
+  IFS="$OIFS"
+
+  return 1
+}
+
+# get_usb_symlink_for_user - get the USB drive directory (the symlink to the user's home directory), if present
+#
+# writes the path name to stdout
+#
+# Returns: 0 on success or 1 on failure
+get_usb_symlink_for_user() {
+  if [[ -L $HOME/USB-Drive ]]; then
+    echo "$HOME/USB-Drive"
+    return 0
+  fi
+  return 1
+}
+
 #########################################################################
 #
 #  FILE EDITION
 #
 #########################################################################
 delete_line_from_file() {
-  # first parameter is the string to be matched 
+  # first parameter is the string to be matched
   # the lines that contain that string will get deleted
   # second parameter is the filename
   if [ -f $2 ]
