@@ -73,6 +73,7 @@ RPI_VARIANTS = {
 
 "a02082" : ["Pi 3 Model B", "RPI3"],
 "a22082" : ["Pi 3 Model B", "RPI3"],
+"a020d3" : ["Pi 3 Model B+", "RPI3B+"],
 }
 
 # represents indexes for each corresponding key in the above dictionary
