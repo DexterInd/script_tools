@@ -49,9 +49,7 @@ fi
 
 cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
 sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
-echo "Removing build artifacts"
-sudo rm -r *.egg-info build dist
-python setup.py install
-python3 setup.py install
+python setup.py install --force
+python3 setup.py install --force
 
 popd > /dev/null
