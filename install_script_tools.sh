@@ -54,6 +54,7 @@ done
 
 if [[ $usepython3exec = "true" ]]; then
   command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 3; }
+fi
 
 DEXTER=Dexter
 LIB=lib
