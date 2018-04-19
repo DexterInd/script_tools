@@ -8,6 +8,9 @@
 #####################################################################
 #####################################################################
 
+command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Aborting." >&2; exit 1; }
+command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Aborting." >&2; exit 2; }
+
 # the following 3 options are mutually exclusive
 systemwide=true
 userlocal=false
@@ -49,10 +52,8 @@ for i; do
   esac
 done
 
-echo $systemwide
-echo $userlocal
-echo $envlocal
-echo $selectedbranch
+if $usepython3exec; then
+  command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 3; }
 
 DEXTER=Dexter
 LIB=lib
@@ -76,13 +77,13 @@ current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
 
 cd $HOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
 
-[[ $updatedebs ]] && sudo apt-get update
-[[ $installdebs ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
-[[ $systemwide ]] && sudo python setup.py install --force \
-                  && [[ $usepython3exec ]] && sudo python3 setup.py install --force
-[[ $userlocal ]] && python setup.py install --force --user \
-                  && [[ $usepython3exec ]] && python3 setup.py install --force --user
-[[ $envlocal ]] && python setup.py install --force \
-                  && [[ $usepython3exec ]] && python3 setup.py install --force
+$updatedebs && sudo apt-get update
+$installdebs && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
+$systemwide && sudo python setup.py install --force \
+            && $usepython3exec && sudo python3 setup.py install --force
+$userlocal && python setup.py install --force --user \
+            && $usepython3exec && python3 setup.py install --force --user
+$envlocal && python setup.py install --force \
+            && $usepython3exec && python3 setup.py install --force
 
 popd > /dev/null
