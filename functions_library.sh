@@ -57,7 +57,7 @@ change_branch() {
 
 ###########################################################################
 #
-# USB drive stuff
+# USB drive stuff - DEXTEROS ONLY
 #
 ###########################################################################
 
@@ -109,6 +109,32 @@ get_usb_symlink_for_user() {
     return 0
   fi
   return 1
+}
+
+#########################################################################
+#
+#  SCRIPT HELPERS
+#
+#########################################################################
+where_am_i() {
+  # return the directory where the script resides, 
+  # path is relative to where it was called from
+  # includes the filename
+  # call like this:  here=$(where_am_i)
+  echo $(dirname $(readlink -f $0))
+}
+
+where_am_i_fullpath() {
+  # returns the full path to the folder containing the current script
+  # does not contain the script name
+  echo $( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )
+}
+
+who_called_me() {
+  # returns the calling script if any
+  # path is relative
+  # otherwise returns empty
+  echo ${BASH_SOURCE[1]}
 }
 
 #########################################################################
