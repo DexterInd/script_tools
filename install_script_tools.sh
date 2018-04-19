@@ -36,7 +36,7 @@ for i; do
     --update-aptget)
       updatedebs=true
       ;;
-    --just-install-deb-deps)
+    --install-deb-deps)
       installdebs=true
       ;;
     develop|feature/*|hotfix/*|fix/*|DexterOS*|v*)
