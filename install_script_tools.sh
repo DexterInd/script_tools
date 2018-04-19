@@ -57,32 +57,10 @@ SCRIPT=script_tools
 pushd $HOME > /dev/null
 result=${PWD##*/}
 
-echo $result
+echo "Current directory is \"$result\""
 
-# check if ~/Dexter exists, if not create it
-if [ ! -d $DEXTER ] ; then
-    mkdir $DEXTER
-fi
-# go into $DEXTER
-cd $PIHOME/$DEXTER
-
-
-# check if /home/pi/Dexter/lib exists, if not create it
-if [ ! -d $LIB ] ; then
-    mkdir $LIB
-fi
-cd $HOME/$DEXTER/$LIB
-
-# check if /home/pi/Dexter/lib/Dexter exists, if not create it
-if [ ! -d $DEXTER ] ; then
-    mkdir $DEXTER
-fi
-cd $HOME/$DEXTER/$LIB/$DEXTER
-
-
-# check if /home/pi/Dexter/lib/script_tools exists
-# if yes refresh the folder
-# if not, clone the folder
+# create folders recursively if they don't exist already
+mkdir -p $HOME/$DEXTER/$LIB/$DEXTER
 
 # it's simpler and more reliable (for now) to just delete the repo and clone a new one
 # otherwise, we'd have to deal with all the intricacies of git
