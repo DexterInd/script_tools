@@ -51,7 +51,7 @@ fi
 
 cd $HOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
 sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
-python setup.py install --force
-python3 setup.py install --force
+sudo python setup.py install --force
+sudo python3 setup.py install --force
 
 popd > /dev/null
