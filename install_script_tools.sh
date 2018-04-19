@@ -12,6 +12,7 @@
 systemwide=true
 userlocal=false
 envlocal=false
+usepython3exec=false
 
 # the following 2 options can be used together
 updatedebs=false
@@ -38,6 +39,9 @@ for i; do
       ;;
     --install-deb-deps)
       installdebs=true
+      ;;
+    --use-python3-command-too)
+      usepython3exec=true
       ;;
     develop|feature/*|hotfix/*|fix/*|DexterOS*|v*)
       selectedbranch="$i"
@@ -74,9 +78,11 @@ cd $HOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
 
 [[ $updatedebs ]] && sudo apt-get update
 [[ $installdebs ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
-
-[[ $systemwide ]] && sudo python setup.py install --force
-[[ $userlocal ]] && python setup.py install --force --user
-[[ $envlocal ]] && python setup.py install --force
+[[ $systemwide ]] && sudo python setup.py install --force \
+                  && [[ $usepython3exec ]] && sudo python3 setup.py install --force
+[[ $userlocal ]] && python setup.py install --force --user \
+                  && [[ $usepython3exec ]] && python3 setup.py install --force --user
+[[ $envlocal ]] && python setup.py install --force \
+                  && [[ $usepython3exec ]] && python3 setup.py install --force
 
 popd > /dev/null

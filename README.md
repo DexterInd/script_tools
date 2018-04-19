@@ -18,6 +18,8 @@ The options for the python package that can be appended to this command are (all
 
 * `--env-local` - for installing the python package system-wide, but without any special write/read/execute permissions - in order to use this you'll need a virtual environment.
 
+On different distributions, Python 3 can only be used with `python3` command, in which case option `--use-python3-command-too` is required.
+
 The options that can be added for apt-get/deb packages are:
 
 * `update-aptget` - will run `sudo apt-get update`.
@@ -50,6 +52,10 @@ curl -kL dexterindustries.com/update_tools | bash -s DexterOS2.0
 Or if we want the version that's on `develop` branch we can do:
 ```
 curl -kL dexterindustries.com/update_tools | bash -s develop
+```
+To install packages for `python` and `python3` executables/commands, you can do this:
+```
+curl -kL dexterindustries.com/update_tools | bash -s --use-python3-command-too
 ```
 
 # Updating
