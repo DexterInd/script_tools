@@ -52,7 +52,7 @@ for i; do
   esac
 done
 
-if $usepython3exec; then
+if [[ $usepython3exec = "true" ]]; then
   command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 3; }
 
 DEXTER=Dexter
@@ -77,13 +77,14 @@ current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
 
 cd $HOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
 
-$updatedebs && sudo apt-get update
-$installdebs && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
-$systemwide && sudo python setup.py install --force \
-            && $usepython3exec && sudo python3 setup.py install --force
-$userlocal && python setup.py install --force --user \
-            && $usepython3exec && python3 setup.py install --force --user
-$envlocal && python setup.py install --force \
-            && $usepython3exec && python3 setup.py install --force
+[[ $updatedebs = "true" ]] && sudo apt-get update
+[[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
+
+[[ $systemwide = "true" ]] && sudo python setup.py install --force \
+            && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install --force
+[[ $userlocal = "true" ]] && python setup.py install --force --user \
+            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force --user
+[[ $envlocal = "true" ]] && python setup.py install --force \
+            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force
 
 popd > /dev/null
