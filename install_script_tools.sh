@@ -10,6 +10,7 @@
 
 command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Aborting." >&2; exit 1; }
 command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Aborting." >&2; exit 2; }
+command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Aborting." >&2; exit 3; }
 
 # the following 3 options are mutually exclusive
 systemwide=true
@@ -53,7 +54,7 @@ for i; do
 done
 
 if [[ $usepython3exec = "true" ]]; then
-  command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 3; }
+  command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 4; }
 fi
 
 DEXTER=Dexter
@@ -67,16 +68,16 @@ echo "Current directory is \"$result\""
 
 # create folders recursively if they don't exist already
 mkdir -p $HOME/$DEXTER/$LIB/$DEXTER
+cd $HOME/$DEXTER/$LIB/$DEXTER
 
 # it's simpler and more reliable (for now) to just delete the repo and clone a new one
 # otherwise, we'd have to deal with all the intricacies of git
 sudo rm -rf $SCRIPT
 git clone --quiet --depth=1 -b $selectedbranch https://github.com/DexterInd/script_tools.git
+cd $SCRIPT
 
 # useful in case we need it
 current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
-
-cd $HOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
 
 [[ $updatedebs = "true" ]] && sudo apt-get update
 [[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
