@@ -300,6 +300,13 @@ create_folder(){
   fi
 }
 
+create_folder_nosudo(){
+  if ! folder_exists "$1"
+  then
+    mkdir "$1"
+  fi
+}
+
 folder_exists(){
   # Only one argument: the folder to look for
   # returns 0 on SUCCESS
