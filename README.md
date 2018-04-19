@@ -55,22 +55,3 @@ curl -kL dexterindustries.com/update_tools | bash -s develop
 # Updating
 
 For updating the package, you can use the same commands describe at the previous section.
-
---user-local)
-  userlocal=true
-  systemwide=false
-  ;;
---env-local)
-  envlocal=true
-  systemwide=false
-  ;;
---system-wide)
-  ;;
---update-aptget)
-  updatedebs=true
-  ;;
---just-install-deb-deps)
-  installdebs=true
-  ;;
-develop|feature/*|hotfix/*|fix/*|DexterOS*|v*)
-  selectedbranch="$i"
