@@ -9,8 +9,10 @@
 #####################################################################
 
 command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Aborting." >&2; exit 1; }
-command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Aborting." >&2; exit 2; }
-command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Aborting." >&2; exit 3; }
+
+# the following option is required should the python package be installed
+# by default, the python package are not installed
+installpythonpkg=false
 
 # the following 3 options are mutually exclusive
 systemwide=true
@@ -28,6 +30,9 @@ selectedbranch="master" # set to master by default
 # iterate through bash arguments
 for i; do
   case "$i" in
+    --install-python-package)
+      installpythonpkg=true
+      ;;
     --user-local)
       userlocal=true
       systemwide=false
@@ -44,7 +49,7 @@ for i; do
     --install-deb-deps)
       installdebs=true
       ;;
-    --use-python3-command-too)
+    --use-python3-exe-too)
       usepython3exec=true
       ;;
     develop|feature/*|hotfix/*|fix/*|DexterOS*|v*)
@@ -53,8 +58,13 @@ for i; do
   esac
 done
 
-if [[ $usepython3exec = "true" ]]; then
-  command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 4; }
+# exit if python/python3/pip are not installed in the current environment
+if [[ $installpythonpkg = "true" ]]; then
+  command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Aborting." >&2; exit 2; }
+  command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Aborting." >&2; exit 3; }
+  if [[ $usepython3exec = "true" ]]; then
+    command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 4; }
+  fi
 fi
 
 DEXTER=Dexter
@@ -82,11 +92,13 @@ current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
 [[ $updatedebs = "true" ]] && sudo apt-get update
 [[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
 
-[[ $systemwide = "true" ]] && sudo python setup.py install --force \
-            && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install --force
-[[ $userlocal = "true" ]] && python setup.py install --force --user \
-            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force --user
-[[ $envlocal = "true" ]] && python setup.py install --force \
-            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force
+if [[ $installpythonpkg = "true" ]]; then
+  [[ $systemwide = "true" ]] && sudo python setup.py install --force \
+              && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install --force
+  [[ $userlocal = "true" ]] && python setup.py install --force --user \
+              && [[ $usepython3exec = "true" ]] && python3 setup.py install --force --user
+  [[ $envlocal = "true" ]] && python setup.py install --force \
+              && [[ $usepython3exec = "true" ]] && python3 setup.py install --force
+fi
 
 popd > /dev/null
