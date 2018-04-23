@@ -5,7 +5,7 @@ Common installation scripts used in multiple products around the Dexter Industri
 
 The most basic command used for updating/installing script_tools can be:
 ```
-curl -kL dexterindustries.com/update_tools | bash
+curl -kL dexterindustries.com/update_tools | bash -s --install-python-package
 ```
 
 The above command installs the python package with user-level permissions on the system-wide environment - which does not work on most distributions unless a virtual environment is used.
