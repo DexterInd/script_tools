@@ -137,6 +137,22 @@ who_called_me() {
   echo ${BASH_SOURCE[1]}
 }
 
+check_internet() {
+    # check if there's internet access
+    # and if there's not, exit the script
+    if ! quiet_mode ; then
+        feedback "Check for internet connectivity..."
+        feedback "=================================="
+        wget -q --tries=2 --timeout=20 --output-document=/dev/null https://raspberrypi.org
+        if [ $? -eq 0 ];then
+            echo "Connected to the Internet"
+        else
+            echo "Unable to Connect, try again !!!"
+            exit 0
+        fi
+    fi
+}
+
 #########################################################################
 #
 #  FILE EDITION
