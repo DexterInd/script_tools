@@ -1,13 +1,4 @@
-#! /bin/bash
-#####################################################################
-#####################################################################
-#
-# to install:
-# curl --silent https://raw.githubusercontent.com/DexterInd/script_tools/master/install_script_tools.sh | bash
-#
-#####################################################################
-#####################################################################
-
+# exit if git is not installed
 command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Aborting." >&2; exit 1; }
 
 # the following option is required should the python package be installed
@@ -74,7 +65,14 @@ SCRIPT=script_tools
 pushd $HOME > /dev/null
 result=${PWD##*/}
 
-echo "Current directory is \"$result\""
+echo "Updating script_tools for $selectedbranch branch with the following options:"
+echo "--install-python-package=$installpythonpkg"
+echo "--system-wide=$systemwide"
+echo "--user-local=$userlocal"
+echo "--env-local=$envlocal"
+echo "--use-python3-exe-too=$usepython3exec"
+echo "--update-aptget=$updatedebs"
+echo "--install-deb-deps=$installdebs"
 
 # create folders recursively if they don't exist already
 mkdir -p $HOME/$DEXTER/$LIB/$DEXTER
@@ -93,7 +91,7 @@ current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
 [[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
 
 if [[ $installpythonpkg = "true" ]]; then
-  [[ $systemwide = "true" ]] && sudo python setup.py install --force \
+  [[ $systemwide = "true" ]] && sudo python setup.py install --force > \
               && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install --force
   [[ $userlocal = "true" ]] && python setup.py install --force --user \
               && [[ $usepython3exec = "true" ]] && python3 setup.py install --force --user
