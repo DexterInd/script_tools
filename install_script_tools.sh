@@ -91,7 +91,7 @@ current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
 [[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
 
 if [[ $installpythonpkg = "true" ]]; then
-  [[ $systemwide = "true" ]] && sudo python setup.py install --force > \
+  [[ $systemwide = "true" ]] && sudo python setup.py install --force \
               && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install --force
   [[ $userlocal = "true" ]] && python setup.py install --force --user \
               && [[ $usepython3exec = "true" ]] && python3 setup.py install --force --user
