@@ -102,3 +102,5 @@ if [[ $installpythonpkg = "true" ]]; then
 fi
 
 popd > /dev/null
+
+exit 0
