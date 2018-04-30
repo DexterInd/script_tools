@@ -1,6 +1,3 @@
-# exit if git is not installed
-command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Aborting." >&2; exit 1; }
-
 # the following option is required should the python package be installed
 # by default, the python package are not installed
 installpythonpkg=false
@@ -49,12 +46,17 @@ for i; do
   esac
 done
 
-# exit if python/python3/pip are not installed in the current environment
+
+# exit if git is not installed
+if [[ $installdebs = "false" ]]; then
+  command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Use \"--install-deb-deps\" option. Aborting." >&2; exit 1; }
+fi
+
+# exit if python/python3 are not installed in the current environment
 if [[ $installpythonpkg = "true" ]]; then
   command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Aborting." >&2; exit 2; }
-  command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Aborting." >&2; exit 3; }
   if [[ $usepython3exec = "true" ]]; then
-    command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 4; }
+    command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Aborting." >&2; exit 3; }
   fi
 fi
 
@@ -78,6 +80,9 @@ echo "--install-deb-deps=$installdebs"
 mkdir -p $HOME/$DEXTER/$LIB/$DEXTER
 cd $HOME/$DEXTER/$LIB/$DEXTER
 
+[[ $updatedebs = "true" ]] && sudo apt-get update
+[[ $installdebs = "true" ]] && sudo apt-get install git build-essential libi2c-dev i2c-tools python-dev python3-dev python-setuptools python3-setuptools libffi-dev -y
+
 # it's simpler and more reliable (for now) to just delete the repo and clone a new one
 # otherwise, we'd have to deal with all the intricacies of git
 sudo rm -rf $SCRIPT
@@ -86,9 +91,6 @@ cd $SCRIPT
 
 # useful in case we need it
 current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
-
-[[ $updatedebs = "true" ]] && sudo apt-get update
-[[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev python3-dev python-setuptools python3-setuptools libffi-dev -y
 
 if [[ $installpythonpkg = "true" ]]; then
   [[ $systemwide = "true" ]] && sudo python setup.py install --force \
