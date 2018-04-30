@@ -88,7 +88,7 @@ cd $SCRIPT
 current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
 
 [[ $updatedebs = "true" ]] && sudo apt-get update
-[[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
+[[ $installdebs = "true" ]] && sudo apt-get install build-essential libi2c-dev i2c-tools python-dev python3-dev python-setuptools python3-setuptools libffi-dev -y
 
 if [[ $installpythonpkg = "true" ]]; then
   [[ $systemwide = "true" ]] && sudo python setup.py install --force \
