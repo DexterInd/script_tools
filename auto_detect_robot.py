@@ -240,7 +240,7 @@ def remove_desktop_control(file):
         print("File Not Found:" + file + "  " + str(e))
         # print(e)
 
-def remove_control_panel(src):
+def remove_control_panel(detected_robot_list):
     GoPiGo_3_Src_File = '''/home/pi/Dexter/GoPiGo3/Software/Python/Examples/Control_Panel/gopigo3_control_panel.desktop'''
     GoPiGo_2_Src_File = '''/home/pi/Dexter/GoPiGo/Software/Python/control_panel/gopigo_control_panel.desktop'''
     PivotPi_Src_file  = '''/home/pi/Dexter/PivotPi/Software/Python/Control_Panel/pivotpi_control_panel.desktop'''
@@ -248,37 +248,36 @@ def remove_control_panel(src):
     GoPiGo_2_Dsk_File = '''/home/pi/Desktop/gopigo_control_panel.desktop'''
     PivotPi_Dsk_File = '''/home/pi/Desktop/pivotpi_control_panel.desktop'''
 
+    # Clean up all control panels
     remove_desktop_control(GoPiGo_2_Dsk_File)
     remove_desktop_control(GoPiGo_3_Dsk_File)
     remove_desktop_control(PivotPi_Dsk_File)
 
-    if src.find("GoPiGo3") != -1:
-        try:
-            # Remove the control panel links
-            print("GoPiGo3 Control Panel Added.")
-            # Copy the GoPiGo3 Control Panel in place
-            copyfile(GoPiGo_3_Src_File, GoPiGo_3_Dsk_File)
-        except OSError as e:
-            print("Error Adding GoPiGo3 Control Panel Links")
-            print(e)
-    # For the GoPiGo, add the Control Panel Links
-    elif src.find("GoPiGo") != -1 : 
-        try:
-            # Copy the GoPiGo2 Control Panel Link In
-            copyfile(GoPiGo_2_Src_File, GoPiGo_2_Dsk_File)
-            print("GoPiGo2 Control Panel Added.")
-        except OSError as e:
-            print("No GoPiGo control panel found.")
-            print(e)
+    # go through list and reinstate the robots that have been detected
+    for detection in detected_robot_list:
 
-    if src.find("PivotPi")!= -1:
-        try:
-            # Copy the GoPiGo2 Control Panel Link In
-            copyfile(PivotPi_Src_file, PivotPi_Dsk_File)
-            print("PivotPi Control Panel Added.")
-        except OSError as e:
-            print("No PivotPi control panel found.")
-            print(e)
+        # Start matching GoPigo3 first as it is a greedier match
+        if detection.find("GoPiGo3") != -1:
+            try:
+                copyfile(GoPiGo_3_Src_File, GoPiGo_3_Dsk_File)
+            except OSError as e:
+                print("Error Adding GoPiGo3 Control Panel Links")
+                print(e)
+
+        # if the greedier match didn't work, then maybe this one will
+        elif detection.find("GoPiGo") != -1 : 
+            try:
+                copyfile(GoPiGo_2_Src_File, GoPiGo_2_Dsk_File)
+            except OSError as e:
+                print("No GoPiGo control panel found.")
+                print(e)
+
+        if detection.find("PivotPi")!= -1:
+            try:
+                copyfile(PivotPi_Src_file, PivotPi_Dsk_File)
+            except OSError as e:
+                print("No PivotPi control panel found.")
+                print(e)
 
 
     
@@ -316,7 +315,4 @@ if __name__ == '__main__':
         add_symlink(detection)
         # print("Add " + detection)
     
-    # Add control panel for the GoPiGo that is detected.
-    for detection in detected_robot_list:
-        print("Remove Control Panel: " + detection)
-        remove_control_panel(detection)
+    remove_control_panel(detected_robot_list)
