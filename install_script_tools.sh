@@ -77,7 +77,8 @@ echo "--update-aptget=$updatedebs"
 echo "--install-deb-deps=$installdebs"
 
 # create folders recursively if they don't exist already
-mkdir -p $HOME/$DEXTER/$LIB/$DEXTER
+sudo mkdir -p $HOME/$DEXTER/$LIB/$DEXTER
+sudo chown pi:pi -R $HOME/$DEXTER
 cd $HOME/$DEXTER/$LIB/$DEXTER
 
 [[ $updatedebs = "true" ]] && sudo apt-get update
