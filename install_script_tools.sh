@@ -1,3 +1,9 @@
+#! /bin/bash
+
+################################################
+######## Parsing Command Line Arguments ########
+################################################
+
 # the following option is required should the python package be installed
 # by default, the python package are not installed
 installpythonpkg=false
@@ -81,14 +87,26 @@ sudo mkdir -p $HOME/$DEXTER/$LIB/$DEXTER
 sudo chown pi:pi -R $HOME/$DEXTER
 cd $HOME/$DEXTER/$LIB/$DEXTER
 
+################################################
+######## Installing Dependencies  ##############
+################################################
+
 [[ $updatedebs = "true" ]] && sudo apt-get update
 [[ $installdebs = "true" ]] && sudo apt-get install git build-essential libi2c-dev i2c-tools python-dev python3-dev python-setuptools python3-setuptools libffi-dev -y
+
+################################################
+######## Cloning script_tools  #################
+################################################
 
 # it's simpler and more reliable (for now) to just delete the repo and clone a new one
 # otherwise, we'd have to deal with all the intricacies of git
 sudo rm -rf $SCRIPT
 git clone --quiet --depth=1 -b $selectedbranch https://github.com/DexterInd/script_tools.git
 cd $SCRIPT
+
+################################################
+######## Installing Packages  ##################
+################################################
 
 # useful in case we need it
 current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
