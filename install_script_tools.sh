@@ -57,7 +57,7 @@ done
 
 # exit if git is not installed
 if [[ $installdebs = "false" ]]; then
-  command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Use \"--install-deb-deps\" option. Aborting." >&2; exit 1; }
+  command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Use \"--install-deb-deps\" option. Aborting." >&2; exit 1; }
 fi
 
 # exit if python/python3 are not installed in the current environment
