@@ -200,7 +200,7 @@ install_python_package() {
 ######## Aggregating all function calls ########
 ################################################
 
-parse_cmdline_arguments
+parse_cmdline_arguments "$@"
 install_dependencies
 clone_scriptools
 install_python_package
