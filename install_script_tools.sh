@@ -8,7 +8,7 @@ OS_CODENAME=$(lsb_release --codename --short)
 PIHOME=/home/pi
 DEXTER=Dexter
 LIB=lib
-DEXTER_PATH=$HOME/$DEXTER/$LIB/$DEXTER
+DEXTER_PATH=$PIHOME/$DEXTER/$LIB/$DEXTER
 DEXTER_SCRIPT=$DEXTER_PATH/script_tools
 REPO_PACKAGE=dexter-autodetection-and-i2c-mutex
 
@@ -75,7 +75,7 @@ parse_cmdline_arguments() {
     fi
   fi
 
-  pushd $HOME > /dev/null
+  pushd $PIHOME > /dev/null
   result=${PWD##*/}
 
   echo "Updating script_tools for $selectedbranch branch with the following options:"
@@ -89,7 +89,7 @@ parse_cmdline_arguments() {
 
   # create folders recursively if they don't exist already
   sudo mkdir -p $DEXTER_PATH
-  sudo chown pi:pi -R $HOME/$DEXTER
+  sudo chown pi:pi -R $PIHOME/$DEXTER
   popd > /dev/null
 }
 
@@ -104,7 +104,7 @@ install_dependencies() {
     # to confirm nodejs is available for the given distribution
     curl -sLf -o /dev/null "https://deb.nodesource.com/node_9.x/dists/$OS_CODENAME/Release"
     ret_val=$?
-    if [[ $ret_val -e 0 ]]; then
+    if [[ $ret_val -eq 0 ]]; then
       # add gpg key for nodejs
       curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
       # add nodejs to apt-get source list
