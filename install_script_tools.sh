@@ -4,6 +4,8 @@
 ######## Parsing Command Line Arguments ########
 ################################################
 
+OS_CODENAME=$(lsb_release --codename --short)
+
 # the following option is required should the python package be installed
 # by default, the python package are not installed
 installpythonpkg=false
@@ -91,7 +93,24 @@ cd $HOME/$DEXTER/$LIB/$DEXTER
 ######## Installing Dependencies  ##############
 ################################################
 
-[[ $updatedebs = "true" ]] && sudo apt-get update
+if [[ $updatedebs = "true" ]]; then
+  # bring in nodejs repo
+
+  # to confirm nodejs is available for the given distribution
+  curl -sLf -o /dev/null "https://deb.nodesource.com/node_9.x/dists/$OS_CODENAME/Release"
+  ret_val=$?
+  if [[ $ret_val -e 0 ]]; then
+    # add gpg key for nodejs
+    curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+    # add nodejs to apt-get source list
+    sudo sh -c "echo 'deb https://deb.nodesource.com/node_9.x $OS_CODENAME main' > /etc/apt/sources.list.d/nodesource.list"
+    sudo sh -c "echo 'deb-src https://deb.nodesource.com/node_9.x $OS_CODENAME main' >> /etc/apt/sources.list.d/nodesource.list"
+  else
+    echo "Couldn't add Nodejs repo because it's not available for this distribution"
+  fi
+
+  sudo apt-get update
+fi
 [[ $installdebs = "true" ]] && sudo apt-get install git build-essential libi2c-dev i2c-tools python-dev python3-dev python-setuptools python3-setuptools libffi-dev -y
 
 ################################################
