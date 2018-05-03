@@ -185,13 +185,15 @@ install_python_packages() {
 }
 
 install_python_package() {
-  # remove the python package that resides in this repo
-  remove_python_packages $REPO_PACKAGE
+  if [[ $installpythonpkg = "true" ]]; then
+    # remove the python package that resides in this repo
+    remove_python_packages $REPO_PACKAGE
 
-  # and install the new one
-  pushd $DEXTER_SCRIPT > /dev/null
-  install_python_packages
-  popd > /dev/null
+    # and install the new one
+    pushd $DEXTER_SCRIPT > /dev/null
+    install_python_packages
+    popd > /dev/null
+  fi
 }
 
 ################################################
