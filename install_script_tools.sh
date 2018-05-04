@@ -12,6 +12,15 @@ DEXTER_PATH=$PIHOME/$DEXTER/$LIB/$DEXTER
 DEXTER_SCRIPT=$DEXTER_PATH/script_tools
 REPO_PACKAGE=dexter-autodetection-and-i2c-mutex
 
+# called way down bellow
+check_if_run_with_pi() {
+  ## if not running with the pi user then exit
+  if [ $(id -ur) -ne $(id -ur pi) ]; then
+    echo "GoPiGo3 installer script must be run with \"pi\" user. Exiting."
+    exit 4
+  fi
+}
+
 parse_cmdline_arguments() {
   # the following option is required should the python package be installed
   # by default, the python package are not installed
@@ -200,6 +209,7 @@ install_python_package() {
 ######## Aggregating all function calls ########
 ################################################
 
+check_if_run_with_pi
 parse_cmdline_arguments "$@"
 install_dependencies
 clone_scriptools
