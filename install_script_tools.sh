@@ -16,7 +16,7 @@ REPO_PACKAGE=dexter-autodetection-and-i2c-mutex
 check_if_run_with_pi() {
   ## if not running with the pi user then exit
   if [ $(id -ur) -ne $(id -ur pi) ]; then
-    echo "GoPiGo3 installer script must be run with \"pi\" user. Exiting."
+    echo "script_tools installer script must be run with \"pi\" user. Exiting."
     exit 4
   fi
 }
