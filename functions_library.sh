@@ -296,7 +296,7 @@ wget_file() {
 create_folder(){
   if ! folder_exists "$1"
   then
-    sudo mkdir "$1"
+    sudo mkdir -p "$1"
   fi
 }
 
