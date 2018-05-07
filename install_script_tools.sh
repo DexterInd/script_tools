@@ -125,7 +125,7 @@ install_dependencies() {
 
     sudo apt-get update
   fi
-  [[ $installdebs = "true" ]] && sudo apt-get install git build-essential libi2c-dev i2c-tools python-dev python3-dev python-setuptools python3-setuptools libffi-dev -y
+  [[ $installdebs = "true" ]] && sudo apt-get install git build-essential libi2c-dev i2c-tools python-dev python3-dev python-setuptools python3-setuptools python-pip python3-pip libffi-dev -y
 }
 
 ################################################
