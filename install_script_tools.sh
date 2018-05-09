@@ -69,7 +69,7 @@ clone_scriptools(){
 ################################################
 
 check_if_run_with_pi
-parse_arguments
+parse_arguments "$@"
 check_dependencies
 clone_scriptools
 
