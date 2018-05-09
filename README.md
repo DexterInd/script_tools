@@ -5,7 +5,7 @@ Common installation scripts used in multiple products around the Dexter Industri
 
 The most basic command used for updating/installing script_tools can be:
 ```
-curl -kL dexterindustries.com/update_tools | bash -s
+curl -kL dexterindustries.com/update_tools | bash
 ```
 This will get the repository cloned on the Pi machine without installing any packages or dependencies. 
 
