@@ -5,7 +5,7 @@ Common installation scripts used in multiple products around the Dexter Industri
 
 The most basic command used for updating/installing script_tools can be:
 ```
-curl -kL dexterindustries.com/update_tools | bash -s --install-python-package
+curl -kL dexterindustries.com/update_tools | bash -s -- --install-python-package
 ```
 
 The above command installs the python package with user-level permissions on the system-wide environment - which does not work on most distributions unless a virtual environment is used.
@@ -40,30 +40,30 @@ Also, to this install script you can specify a tag or a branch you want to use, 
 
 To install the python package with `sudo` and skip installing apt-get packages (though in this case `--system-wide` can be omitted because it's turned on by default):
 ```
-curl -kL dexterindustries.com/update_tools | bash -s --install-python-package --system-wide
+curl -kL dexterindustries.com/update_tools | bash -s -- --install-python-package --system-wide
 ```
 
 To install the python package locally in the home directory and skip installing apt-get packages:
 ```
-curl -kL dexterindustries.com/update_tools | bash -s --install-python-package --user-local
+curl -kL dexterindustries.com/update_tools | bash -s -- --install-python-package --user-local
 ```
 
 To install the python package locally in the home directory, run apt-get update and install apt-get dependencies:
 ```
-curl -kL dexterindustries.com/update_tools | bash -s --install-python-package --user-local --update-aptget --install-deb-deps
+curl -kL dexterindustries.com/update_tools | bash -s -- --install-python-package --user-local --update-aptget --install-deb-deps
 ```
 
 To only install `script_tools` at the designated location without installing the python package and take the version that's pointed by tag `DexterOS2.0`:
 ```
-curl -kL dexterindustries.com/update_tools | bash -s DexterOS2.0
+curl -kL dexterindustries.com/update_tools | bash -s -- DexterOS2.0
 ```
 Or if we want the version that's on `develop` branch we can do:
 ```
-curl -kL dexterindustries.com/update_tools | bash -s develop
+curl -kL dexterindustries.com/update_tools | bash -s -- develop
 ```
 To install packages for `python` and `python3` executables/commands, you can do this:
 ```
-curl -kL dexterindustries.com/update_tools | bash -s --install-python-package --use-python3-exe-too
+curl -kL dexterindustries.com/update_tools | bash -s -- --install-python-package --use-python3-exe-too
 ```
 
 # Updating
