@@ -7,7 +7,7 @@ The most basic command used for updating/installing script_tools can be:
 ```
 curl -kL dexterindustries.com/update_tools | bash -s
 ```
-This will get the repository cloned on the Pi machine without installting any packages or dependencies. 
+This will get the repository cloned on the Pi machine without installing any packages or dependencies. 
 
 ### Python Package Options
 
