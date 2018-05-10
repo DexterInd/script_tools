@@ -211,7 +211,8 @@ install_python_package() {
 ######## Aggregating all function calls ########
 ################################################
 
-check_if_run_with_pi
+# wait on this check until all scripts are ready
+#check_if_run_with_pi
 parse_cmdline_arguments "$@"
 install_dependencies
 clone_scriptools
