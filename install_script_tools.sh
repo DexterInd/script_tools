@@ -21,7 +21,7 @@ check_if_run_with_pi() {
 }
 
 check_dependencies() {
-  command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Use \"--install-deb-deps\" option. Aborting." >&2; exit 1; }
+  command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Aborting." >&2; exit 1; }
 }
 
 
