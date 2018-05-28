@@ -1,55 +1,77 @@
 #! /bin/bash
-#####################################################################
-#####################################################################
-#
-# to install:
-# curl --silent https://raw.githubusercontent.com/DexterInd/script_tools/master/install_script_tools.sh | bash
-#
-#####################################################################
-#####################################################################
 
 PIHOME=/home/pi
 DEXTER=Dexter
 LIB=lib
-SCRIPT=script_tools
+DEXTER_PATH=$PIHOME/$DEXTER/$LIB/$DEXTER
+DEXTER_SCRIPT=$DEXTER_PATH/script_tools
+selectedbranch=master
 
-pushd $PIHOME > /dev/null
-result=${PWD##*/}
-# check if ~/Dexter exists, if not create it
-if [ ! -d $DEXTER ] ; then
-    mkdir $DEXTER
-fi
-# go into $DEXTER
-cd $PIHOME/$DEXTER
+################################################
+######## Run a series of checks ################
+################################################
 
+# called way down bellow
+check_if_run_with_pi() {
+  ## if not running with the pi user then exit
+  if [ $(id -ur) -ne $(id -ur pi) ]; then
+    echo "script_tools installer script must be run with \"pi\" user. Exiting."
+    exit 2
+  fi
+}
 
-# check if /home/pi/Dexter/lib exists, if not create it
-if [ ! -d $LIB ] ; then
-    mkdir $LIB
-fi
-cd $PIHOME/$DEXTER/$LIB
-
-# check if /home/pi/Dexter/lib/Dexter exists, if not create it
-if [ ! -d $DEXTER ] ; then
-    mkdir $DEXTER
-fi
-cd $PIHOME/$DEXTER/$LIB/$DEXTER
+check_dependencies() {
+  command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Aborting." >&2; exit 1; }
+}
 
 
-# check if /home/pi/Dexter/lib/script_tools exists
-# if yes refresh the folder
-# if not, clone the folder
-if [ ! -d $SCRIPT ] ; then
-    # clone the folder
-    git clone --quiet https://github.com/DexterInd/script_tools.git
-else
-    cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
-    git pull --quiet
-fi
+################################################
+########### Parse arguments ####################
+################################################
 
-cd $PIHOME/$DEXTER/$LIB/$DEXTER/$SCRIPT
-sudo apt-get install build-essential libi2c-dev i2c-tools python-dev libffi-dev -y
-python setup.py install --force
-python3 setup.py install --force
+parse_arguments() {
+  # iterate through bash arguments
+  for i; do
+    case "$i" in
+      develop|feature/*|hotfix/*|fix/*|DexterOS*|v*)
+        selectedbranch="$i"
+        ;;
+    esac
+  done
+}
 
-popd > /dev/null
+################################################
+######## Cloning script_tools  #################
+################################################
+
+clone_scriptools(){
+  # create folders recursively if they don't exist already
+  # can't use <<functions_library.sh>> here because there's no
+  # cloned script_tools yet at this part of the install script
+  pushd $PIHOME > /dev/null
+  sudo mkdir -p $DEXTER_PATH
+  sudo chown pi:pi -R $PIHOME/$DEXTER
+  popd > /dev/null
+
+  # it's simpler and more reliable (for now) to just delete the repo and clone a new one
+  # otherwise, we'd have to deal with all the intricacies of git
+  sudo rm -rf $DEXTER_SCRIPT
+  pushd $DEXTER_PATH > /dev/null
+  # use $selectedbranch when we're done testing
+  git clone --quiet --depth=1 -b develop https://github.com/DexterInd/script_tools.git
+  cd $DEXTER_SCRIPT
+  # useful in case we need it
+  current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
+  popd > /dev/null
+}
+
+################################################
+######## Aggregating all function calls ########
+################################################
+
+check_if_run_with_pi
+parse_arguments "$@"
+check_dependencies
+clone_scriptools
+
+exit 0

@@ -57,7 +57,7 @@ change_branch() {
 
 ###########################################################################
 #
-# USB drive stuff
+# USB drive stuff - DEXTEROS ONLY
 #
 ###########################################################################
 
@@ -109,6 +109,48 @@ get_usb_symlink_for_user() {
     return 0
   fi
   return 1
+}
+
+#########################################################################
+#
+#  SCRIPT HELPERS
+#
+#########################################################################
+where_am_i() {
+  # return the directory where the script resides, 
+  # path is relative to where it was called from
+  # includes the filename
+  # call like this:  here=$(where_am_i)
+  echo $(dirname $(readlink -f $0))
+}
+
+where_am_i_fullpath() {
+  # returns the full path to the folder containing the current script
+  # does not contain the script name
+  echo $( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )
+}
+
+who_called_me() {
+  # returns the calling script if any
+  # path is relative
+  # otherwise returns empty
+  echo ${BASH_SOURCE[1]}
+}
+
+check_internet() {
+    # check if there's internet access
+    # and if there's not, exit the script
+    if ! quiet_mode ; then
+        feedback "Check for internet connectivity..."
+        feedback "=================================="
+        wget -q --tries=2 --timeout=20 --output-document=/dev/null https://raspberrypi.org
+        if [ $? -eq 0 ];then
+            echo "Connected to the Internet"
+        else
+            echo "Unable to Connect, try again !!!"
+            exit 0
+        fi
+    fi
 }
 
 #########################################################################
@@ -281,6 +323,13 @@ create_folder(){
   if ! folder_exists "$1"
   then
     sudo mkdir -p "$1"
+  fi
+}
+
+create_folder_nosudo(){
+  if ! folder_exists "$1"
+  then
+    mkdir -p "$1"
   fi
 }
 
