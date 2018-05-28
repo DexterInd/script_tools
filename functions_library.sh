@@ -146,6 +146,16 @@ add_line_to_end_of_file() {
   fi 
 }
 
+sudo_add_line_to_end_of_file() {
+  if [ -f $2 ]
+  then
+      if ! grep "$1"  "$2" 
+      then
+        sudo bash -c "echo $1 >> $2"
+      fi
+  fi 
+}
+
 replace_first_this_with_that_in_file() {
   # replaces the first occurence
   # first parameter is the string to be replaced
