@@ -57,8 +57,8 @@ clone_scriptools(){
   # otherwise, we'd have to deal with all the intricacies of git
   sudo rm -rf $DEXTER_SCRIPT
   pushd $DEXTER_PATH > /dev/null
-  # use $selectedbranch when we're done testing
-  git clone --quiet --depth=1 -b develop https://github.com/DexterInd/script_tools.git
+
+  git clone --quiet --depth=1 -b $selectedbranch https://github.com/DexterInd/script_tools.git
   cd $DEXTER_SCRIPT
   # useful in case we need it
   current_branch=$(git branch | grep \* | cut -d ' ' -f2-)
