@@ -5,6 +5,7 @@ DEXTER=Dexter
 LIB=lib
 DEXTER_PATH=$PIHOME/$DEXTER/$LIB/$DEXTER
 DEXTER_SCRIPT=$DEXTER_PATH/script_tools
+REPO_PACKAGE=auto_detect_rpi
 
 # selectedbranch variable is defined in parse_arguments function
 
