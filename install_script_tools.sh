@@ -36,7 +36,7 @@ parse_arguments() {
   rpidetector=false
   usepython3exec=false
   userlocal=false
-  systemwide=false
+  systemwide=true
   envlocal=false
 
   # iterate through bash arguments
