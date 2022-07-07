@@ -50,4 +50,4 @@ LIB=lib
 # # End check if WiringPi installed
 
 
-sudo python -m pip install wiringPi==2.60.0
+sudo python -m pip install wiringPi==2.60.1
